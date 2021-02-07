@@ -3,6 +3,7 @@
   "description": "DeFiat: Core Smart Contracts",
   "version": "1.0.0",
   "license": "MIT",
+  "private": false,
   "author": {
     "name": "DeFiat",
     "email": "hello@defiat.net",
