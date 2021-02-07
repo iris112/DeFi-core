@@ -3,20 +3,30 @@
   "description": "DeFiat: Core Smart Contracts",
   "version": "1.0.0",
   "license": "MIT",
-  "private": false,
+  "homepage": "https://defiat.net",
   "author": {
     "name": "DeFiat",
-    "email": "hello@defiat.net",
-    "url": "https://defiat.net"
+    "email": "hello@defiat.net"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/defiat-crypto/core-contracts.git"
+    "url": "https://github.com/defiat-crypto/core-contracts"
   },
+  "keywords": [
+    "defiat",
+    "ethereum",
+    "solidity",
+    "defi"
+  ],
+  "files": [
+    "contracts",
+    "build"
+  ],
   "scripts": {
     "compile": "hardhat compile",
     "dev": "hardhat node --watch",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "postinstall": "yarn compile"
   },
   "devDependencies": {
     "@ethereum-waffle/chai": "^3.2.2",
@@ -33,6 +43,7 @@
     "hardhat-abi-exporter": "^2.0.7",
     "hardhat-deploy": "^0.7.0-beta.44",
     "hardhat-deploy-ethers": "^0.3.0-beta.7",
+    "hardhat-spdx-license-identifier": "^2.0.3",
     "hardhat-typechain": "^0.3.4",
     "solc": "0.6.6",
     "ts-generator": "^0.1.1",
