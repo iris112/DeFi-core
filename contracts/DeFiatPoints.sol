@@ -14,12 +14,14 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     event AllTranchesUpdated(address indexed user);
     event TokenUpdated(address indexed user, address token);
     event PointsUpdated(address indexed user, address indexed subject, uint256 amount);
+    event RedirectionUpdated(address indexed user, address indexed subject, bool redirect);
 
     address public token; // DFT ERC20 Token 
     
     mapping (uint256 => uint256) public discountTranches; // mapping of DFTP needed for each discount tranche
     mapping (address => uint256) private _discounts; // mapping of users to current discount, 100 = 100%
     mapping (address => uint256) private _lastTx; // mapping of users last txn
+    mapping (address => bool) private _redirection; // addresses where points should be redirected to tx.origin, i.e. uniswap
 
     modifier onlyToken {
         require(msg.sender == token, "Points: Only DeFiat Token");
@@ -57,6 +59,11 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     // Points - Min amount 
     function viewTxThreshold() public view returns (uint256) {
         return IDeFiatGov(governance).viewTxThreshold();
+    }
+
+    // Points - view redirection address
+    function viewRedirection(address _address) public view returns (bool) {
+        return _redirection[_address];
     }
 
     // State-Changing Functions
@@ -126,7 +133,11 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     // Only callable by Token
     function addPoints(address _address, uint256 _txSize, uint256 _points) external onlyToken {
         if(_txSize >= viewTxThreshold() && _lastTx[tx.origin] < block.number){
-            _mint(_address, _points);
+            if (_redirection[_address]) {
+                _mint(tx.origin, _points);
+            } else {
+                _mint(_address, _points);
+            }
             _lastTx[tx.origin] = block.number;
         }
     }
@@ -139,6 +150,14 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
         // force update discount
         uint256 tranche = viewEligibilityOf(msg.sender);
         _discounts[msg.sender] = tranche * 10;
+    }
+
+    // Gov - Set redirection address
+    function setRedirection(address _address, bool _redirect) external onlyGovernor {
+        require(_redirection[_address] != _redirect, "SetRedirection: No redirection change");
+
+        _redirection[_address] = _redirect;
+        emit RedirectionUpdated(msg.sender, _address, _redirect);
     }
 
     // Gov - Update the DeFiat Token address

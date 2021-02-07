@@ -2,11 +2,7 @@
 
 pragma solidity >=0.6.0 <0.8.0;
 
-import "./Math.sol";
-
 library SafeMath {
-    using Math for *;
-
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
         uint256 c = a + b;
         require(c >= a, "SafeMath: addition overflow");
