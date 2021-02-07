@@ -3,6 +3,7 @@ import { HardhatUserConfig, task } from "hardhat/config";
 import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 import "hardhat-abi-exporter";
+import "hardhat-spdx-license-identifier";
 import "hardhat-typechain";
 
 task("accounts", "Prints the list of accounts", async (args, hre) => {
@@ -15,6 +16,15 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 
 const config: HardhatUserConfig = {
   solidity: "0.6.6",
+  abiExporter: {
+    path: "./build",
+    clear: true,
+    flat: true,
+  },
+  spdxLicenseIdentifier: {
+    overwrite: true,
+    runOnCompile: true,
+  },
   namedAccounts: {
     mastermind: 0, //"0x4F4B49E7f3661652F13A6D2C86d9Af4435414721",
     governor: 1,
@@ -36,10 +46,6 @@ const config: HardhatUserConfig = {
       4: "0x064fd7d9c228e8a4a2bf247b432a34d6e1cb9442",
       31337: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
     },
-  },
-  abiExporter: {
-    clear: true,
-    flat: true,
   },
   networks: {
     hardhat: {

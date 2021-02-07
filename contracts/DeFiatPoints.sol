@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 
+
+
 pragma solidity ^0.6.0;
 
 import "./interfaces/IDeFiatPoints.sol";
@@ -35,12 +37,12 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     // Views
 
     // Discounts - View the current % discount of the _address
-    function viewDiscountOf(address _address) public view returns (uint256) {
+    function viewDiscountOf(address _address) public override view returns (uint256) {
         return _discounts[_address];
     }
 
     // Discounts - View the discount level the _address is eligibile for
-    function viewEligibilityOf(address _address) public view returns (uint256 tranche) {
+    function viewEligibilityOf(address _address) public override view returns (uint256 tranche) {
         uint256 balance = balanceOf(_address);
         for (uint256 i = 0; i <= 9; i++) {
             if (balance >= discountTranches[i]) { 
@@ -52,17 +54,17 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     }
 
     // Discounts - Check amount of points needed for _tranche
-    function discountPointsNeeded(uint256 _tranche) public view returns (uint256 pointsNeeded) {
+    function discountPointsNeeded(uint256 _tranche) public override view returns (uint256 pointsNeeded) {
         return (discountTranches[_tranche]);
     }
 
     // Points - Min amount 
-    function viewTxThreshold() public view returns (uint256) {
+    function viewTxThreshold() public override view returns (uint256) {
         return IDeFiatGov(governance).viewTxThreshold();
     }
 
     // Points - view redirection address
-    function viewRedirection(address _address) public view returns (bool) {
+    function viewRedirection(address _address) public override view returns (bool) {
         return _redirection[_address];
     }
 
