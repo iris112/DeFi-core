@@ -24,4 +24,26 @@ describe("DeFiatPoints", () => {
     expect(firstTranche.eq(ethers.utils.parseEther("100"))).true;
     expect(lastTranche.eq(ethers.utils.parseEther("1000000"))).true;
   });
+
+  it("Should update discounts", async () => {
+    const { mastermind, user } = await setup();
+
+    await mastermind.Points.overrideLoyaltyPoints(
+      mastermind.address,
+      ethers.utils.parseEther("500")
+    ).then((tx) => tx.wait());
+
+    await mastermind.Points.updateMyDiscount().then((tx) => tx.wait());
+
+    await mastermind.Token.transfer(
+      user.address,
+      ethers.utils.parseEther("100")
+    ).then((tx) => tx.wait());
+
+    const level = await mastermind.Points.viewDiscountOf(mastermind.address);
+    const balance = await user.Token.balanceOf(user.address);
+
+    expect(level.eq(20)).true;
+    expect(balance.eq(ethers.utils.parseEther("98"))).true;
+  });
 });

@@ -1,10 +1,18 @@
 {
-  "name": "defiat-contracts",
+  "name": "@defiat-crypto/core-contracts",
+  "description": "DeFiat: Core Smart Contracts",
   "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "DeFiat",
+    "email": "hello@defiat.net",
+    "url": "https://defiat.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/defiat-crypto/core-contracts.git"
+  },
   "scripts": {
-    "export": "rsync -a build/ ../defiat-frontend/src/contracts/",
-    "bootstrap": "lerna bootstrap",
-    "publish": "lerna publish",
     "compile": "hardhat compile",
     "dev": "hardhat node --watch",
     "test": "hardhat test"
