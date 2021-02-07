@@ -23,10 +23,12 @@
     "build"
   ],
   "scripts": {
+    "bump:minor": "yarn version --minor",
+    "bump:major": "yarn version --major",
+    "release": "npm publish --access public",
     "compile": "hardhat compile",
     "dev": "hardhat node --watch",
-    "test": "hardhat test",
-    "postinstall": "yarn compile"
+    "test": "hardhat test"
   },
   "devDependencies": {
     "@ethereum-waffle/chai": "^3.2.2",
