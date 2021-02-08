@@ -16,8 +16,13 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 
 const config: HardhatUserConfig = {
   solidity: "0.6.6",
+  paths: {
+    artifacts: "./build/artifacts",
+    cache: "./build/cache",
+    deployments: "./build/deployments",
+  },
   abiExporter: {
-    path: "./build",
+    path: "./build/abi",
     clear: true,
     flat: true,
   },

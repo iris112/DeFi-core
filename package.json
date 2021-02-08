@@ -20,12 +20,16 @@
   ],
   "files": [
     "contracts",
-    "build"
+    "typechain",
+    "build/abi",
+    "build/artifacts",
+    "build/deploy"
   ],
   "scripts": {
     "bump:minor": "yarn version --minor",
     "bump:major": "yarn version --major",
-    "release": "npm publish --access public",
+    "release": "yarn publish --access public",
+    "build": "hardhat compile && tsc",
     "compile": "hardhat compile",
     "dev": "hardhat node --watch",
     "test": "hardhat test"
