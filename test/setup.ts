@@ -1,5 +1,5 @@
-import { ethers, deployments, getNamedAccounts } from "hardhat";
-import { DeFiatGov, DeFiatPoints, DeFiatToken } from "../typechain";
+import { deployments, getNamedAccounts } from "hardhat";
+import { getAccount } from "../utils";
 
 export const setup = deployments.createFixture(async () => {
   await deployments.fixture();
@@ -10,8 +10,6 @@ export const setup = deployments.createFixture(async () => {
   const _partner = await getAccount(partner);
   const _user = await getAccount(user);
 
-  // seed(); // seed the test if needed
-
   return {
     mastermind: _mastermind,
     governor: _governor,
@@ -19,28 +17,3 @@ export const setup = deployments.createFixture(async () => {
     user: _user,
   };
 });
-
-const getAccount = async (account: string) => {
-  const Token = await getToken(account);
-  const Points = await getPoints(account);
-  const Gov = await getGov(account);
-
-  return {
-    address: account,
-    Token,
-    Points,
-    Gov,
-  };
-};
-
-const getToken = async (account: string) => {
-  return (await ethers.getContract("DeFiatToken", account)) as DeFiatToken;
-};
-
-const getPoints = async (account: string) => {
-  return (await ethers.getContract("DeFiatPoints", account)) as DeFiatPoints;
-};
-
-const getGov = async (account: string) => {
-  return (await ethers.getContract("DeFiatGov", account)) as DeFiatGov;
-};
