@@ -2,10 +2,12 @@
 
 
 
+
+
 pragma solidity ^0.6.0;
 
-import "../lib/token/ERC20/IERC20.sol";
-import "../lib/access/Ownable.sol";
+import "../lib/@openzeppelin/token/ERC20/IERC20.sol";
+import "../lib/@openzeppelin/access/Ownable.sol";
 
 abstract contract DeFiatUtils is Ownable {
     event TokenSweep(address indexed user, address indexed token, uint256 amount);

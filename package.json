@@ -1,7 +1,7 @@
 {
   "name": "@defiat-crypto/core-contracts",
   "description": "DeFiat: Core Smart Contracts",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "license": "MIT",
   "homepage": "https://defiat.net",
   "author": {
@@ -18,12 +18,15 @@
     "solidity",
     "defi"
   ],
+  "main": "./build/index.js",
+  "types": "./build/types/index.d.ts",
   "files": [
     "contracts",
     "typechain",
     "build/abi",
     "build/artifacts",
     "build/deploy",
+    "build/types",
     "build/utils"
   ],
   "scripts": {
@@ -43,6 +46,7 @@
     "@types/mocha": "^8.2.0",
     "@types/node": "^14.14.22",
     "@uniswap/v2-core": "^1.0.1",
+    "@uniswap/v2-periphery": "^1.1.0-beta.0",
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
     "ethers": "^5.0.26",

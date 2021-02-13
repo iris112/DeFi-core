@@ -4,10 +4,11 @@
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "build",
+    "outDir": "./build",
     "resolveJsonModule": true,
-    "sourceMap": true,
-    "declaration": true
+    "declarationDir": "./build/types",
+    "declarationMap": true,
+    "declaration": true,
   },
   "include": [
     "./deploy", 
@@ -15,5 +16,8 @@
     "./test",
     "./utils",
   ],
-  "files": ["./hardhat.config.ts"]
+  "files": [
+    "./hardhat.config.ts",
+    "index.ts"
+  ]
 }

@@ -2,9 +2,11 @@
 
 
 
+
+
 pragma solidity ^0.6.0;
 
-import "./lib/token/ERC20/IERC20.sol";
+import "./lib/@openzeppelin/token/ERC20/IERC20.sol";
 
 /**
  * @dev A token holder contract that will allow a beneficiary to extract the
