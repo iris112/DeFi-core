@@ -6,8 +6,6 @@ import {
   IUniswapV2Factory,
   IUniswapV2Router02,
 } from "../typechain";
-import IUniswapV2FactoryAbi from "../build/abi/IUniswapV2Factory.json";
-import IUniswapV2Router02Abi from "../build/abi/IUniswapV2Router02.json";
 
 export const getAccount = async (account: string) => {
   const Token = await getToken(account);
@@ -43,7 +41,7 @@ export const getUniswapRouter = async (
 ): Promise<IUniswapV2Router02> => {
   const { uniswap } = await getNamedAccounts();
   return (await ethers.getContractAt(
-    IUniswapV2Router02Abi,
+    "IUniswapV2Router02",
     uniswap,
     account
   )) as IUniswapV2Router02;
@@ -55,7 +53,7 @@ export const getUniswapFactory = async (
   const Router = await getUniswapRouter(account);
   const factory = await Router.factory();
   return (await ethers.getContractAt(
-    IUniswapV2FactoryAbi,
+    "IUniswapV2Factory",
     factory,
     account
   )) as IUniswapV2Factory;

@@ -20,10 +20,10 @@ const config: HardhatUserConfig = {
   paths: {
     artifacts: "./build/artifacts",
     cache: "./build/cache",
-    deployments: "./build/deployments",
+    deployments: "./deployments",
   },
   abiExporter: {
-    path: "./build/abi",
+    path: "./abi",
     clear: true,
     flat: true,
   },
@@ -37,12 +37,12 @@ const config: HardhatUserConfig = {
     beta: 2,
     user: 3,
     uniswap: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
-    dft: {
+    token: {
       1: "0xB6eE603933E024d8d53dDE3faa0bf98fE2a3d6f1",
       4: "0xB571d40e4A7087C1B73ce6a3f29EaDfCA022C5B2",
       31337: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
     },
-    dftp: {
+    points: {
       1: "",
       4: "0x70c7d7856e1558210cfbf27b7f17853655752453",
       31337: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
@@ -52,12 +52,12 @@ const config: HardhatUserConfig = {
       4: "0x064fd7d9c228e8a4a2bf247b432a34d6e1cb9442",
       31337: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
     },
-    dftLp: {
+    tokenLp: {
       1: "",
       4: "",
       31337: "0x11C5626eCA6C553010C8F6EDD8Aee6e44ca98610",
     },
-    dftpLp: {
+    pointsLp: {
       1: "",
       4: "",
       31337: "0x604fc78e5985d984156B0287b924ad07A4ECd6e7",

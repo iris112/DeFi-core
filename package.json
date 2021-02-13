@@ -1,7 +1,7 @@
 {
   "name": "@defiat-crypto/core-contracts",
   "description": "DeFiat: Core Smart Contracts",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "license": "MIT",
   "homepage": "https://defiat.net",
   "author": {
@@ -18,16 +18,14 @@
     "solidity",
     "defi"
   ],
-  "main": "./build/index.js",
-  "types": "./build/types/index.d.ts",
   "files": [
+    "abi",
     "contracts",
     "typechain",
-    "build/abi",
     "build/artifacts",
     "build/deploy",
-    "build/types",
-    "build/utils"
+    "build/utils",
+    "build/index.js"
   ],
   "scripts": {
     "bump:minor": "yarn version --minor",

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { setupUniswap } from "./setup";
-import IERC20Abi from "../build/abi/IERC20.json";
+import IERC20Abi from "../abi/IERC20.json";
 import { IERC20 } from "../typechain";
 
 describe("UniswapAddition", () => {
