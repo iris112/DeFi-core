@@ -33,8 +33,8 @@ const config: HardhatUserConfig = {
   },
   namedAccounts: {
     mastermind: 0, //"0x4F4B49E7f3661652F13A6D2C86d9Af4435414721",
-    governor: 1,
-    partner: 2,
+    alpha: 1,
+    beta: 2,
     user: 3,
     uniswap: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
     dft: {
@@ -51,6 +51,16 @@ const config: HardhatUserConfig = {
       1: "0x3Aa3303877A0D1c360a9FE2693AE9f31087A1381",
       4: "0x064fd7d9c228e8a4a2bf247b432a34d6e1cb9442",
       31337: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    },
+    dftLp: {
+      1: "",
+      4: "",
+      31337: "0x11C5626eCA6C553010C8F6EDD8Aee6e44ca98610",
+    },
+    dftpLp: {
+      1: "",
+      4: "",
+      31337: "0x604fc78e5985d984156B0287b924ad07A4ECd6e7",
     },
   },
   networks: {
