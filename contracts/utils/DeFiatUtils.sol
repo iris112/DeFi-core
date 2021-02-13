@@ -24,7 +24,6 @@ abstract contract DeFiatUtils is Ownable {
         emit TokenSweep(msg.sender, token, amount);
     }
 
-
     // Self-Destruct contract to free space on-chain, sweep any ETH to owner
     function kill() external onlyOwner {
         selfdestruct(payable(msg.sender));

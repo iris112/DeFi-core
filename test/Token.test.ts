@@ -16,10 +16,25 @@ describe("DeFiatToken", () => {
 
     expect(name).eq("DeFiat");
     expect(symbol).eq("DFT");
-    expect(totalSupply.eq(ethers.utils.parseEther("500000"))).true;
+    expect(totalSupply.toString()).eq(
+      ethers.utils.parseEther("500000").toString()
+    );
     expect(governance).eq(mastermind.Gov.address);
     expect(points).eq(mastermind.Points.address);
-    expect(burnRate.eq(50)).true;
-    expect(feeRate.eq(200)).true;
+    expect(burnRate.toNumber()).eq(50);
+    expect(feeRate.toNumber()).eq(200);
+  });
+
+  it("Should be deflationary on transfers", async () => {
+    const { mastermind, user } = await setup();
+
+    await mastermind.Token.transfer(
+      user.address,
+      ethers.utils.parseEther("100")
+    ).then((tx) => tx.wait());
+
+    const balance = await user.Token.balanceOf(user.address);
+
+    expect(balance.toString()).eq(ethers.utils.parseEther("97.5").toString());
   });
 });
