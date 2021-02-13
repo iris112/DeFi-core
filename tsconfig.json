@@ -5,7 +5,9 @@
     "strict": true,
     "esModuleInterop": true,
     "outDir": "build",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": true
   },
   "include": [
     "./deploy", 
