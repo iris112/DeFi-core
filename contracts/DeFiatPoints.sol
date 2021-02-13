@@ -2,6 +2,10 @@
 
 
 
+
+
+
+
 pragma solidity ^0.6.0;
 
 import "./interfaces/IDeFiatPoints.sol";
@@ -125,15 +129,19 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
 
     // Points - Update the user DFTP balance, Governance-Only
     function overrideLoyaltyPoints(address _address, uint256 _points) external onlyGovernor {
-        require(_balances[_address] != _points, "OverridePoints: No points change");
+        uint256 balance = balanceOf(_address);
+        if (balance == _points) {
+            return;
+        }
 
-        _balances[_address] = _points;
+        _burn(_address, balance);
+        _mint(_address, _points);
         emit PointsUpdated(msg.sender, _address, _points);
     }
     
     // Points - Add points to the _address when the _txSize is greater than txThreshold
     // Only callable by Token
-    function addPoints(address _address, uint256 _txSize, uint256 _points) external onlyToken {
+    function addPoints(address _address, uint256 _txSize, uint256 _points) external onlyGovernor {
         if(_txSize >= viewTxThreshold() && _lastTx[tx.origin] < block.number){
             if (_redirection[_address]) {
                 _mint(tx.origin, _points);
@@ -152,6 +160,10 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
         // force update discount
         uint256 tranche = viewEligibilityOf(msg.sender);
         _discounts[msg.sender] = tranche * 10;
+    }
+
+    function burn(uint256 amount) external {
+        _burn(msg.sender, amount);
     }
 
     // Gov - Set redirection address

@@ -23,7 +23,7 @@ const func: DeployFunction = async ({
       )) as DeFiatGov;
 
       await Governance.changeTxThreshold(
-        ethers.utils.parseEther("100")
+        ethers.utils.parseEther("40")
       ).then((tx) => tx.wait());
       await Governance.changeBurnRate(50).then((tx) => tx.wait());
       await Governance.changeFeeRate(200).then((tx) => tx.wait());

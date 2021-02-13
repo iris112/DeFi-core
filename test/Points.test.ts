@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { BigNumber, BigNumberish } from "ethers";
 import { ethers } from "hardhat";
 import { setup } from "./setup";
 
@@ -20,9 +21,13 @@ describe("DeFiatPoints", () => {
     expect(totalSupply.eq(0)).true;
     expect(token).eq(mastermind.Token.address);
     expect(governance).eq(mastermind.Gov.address);
-    expect(threshold.eq(ethers.utils.parseEther("100"))).true;
-    expect(firstTranche.eq(ethers.utils.parseEther("100"))).true;
-    expect(lastTranche.eq(ethers.utils.parseEther("1000000"))).true;
+    expect(threshold.toString()).eq(ethers.utils.parseEther("40").toString());
+    expect(firstTranche.toString()).eq(
+      ethers.utils.parseEther("100").toString()
+    );
+    expect(lastTranche.toString()).eq(
+      ethers.utils.parseEther("1000000").toString()
+    );
   });
 
   it("Should update discounts", async () => {
@@ -45,5 +50,64 @@ describe("DeFiatPoints", () => {
 
     expect(level.eq(20)).true;
     expect(balance.eq(ethers.utils.parseEther("98"))).true;
+  });
+
+  it("Should mint on eligible transfers", async () => {
+    const { mastermind, user } = await setup();
+
+    const transferUserPoints = async (amount: string) => {
+      await mastermind.Token.transfer(
+        user.address,
+        ethers.utils.parseEther(amount)
+      ).then((tx) => tx.wait());
+
+      const balance = await mastermind.Points.balanceOf(mastermind.address);
+      return balance;
+    };
+
+    const txThreshold = await mastermind.Points.viewTxThreshold();
+    const thresholdString = txThreshold
+      .div(ethers.utils.parseEther("1"))
+      .toString();
+
+    const balance1 = await transferUserPoints("1");
+    const balance2 = await transferUserPoints(thresholdString);
+    const balance3 = await transferUserPoints("10000");
+
+    expect(balance1.toNumber()).eq(0);
+    expect(balance2.toString()).eq(ethers.utils.parseEther("1").toString());
+    expect(balance3.toString()).eq(ethers.utils.parseEther("2").toString());
+  });
+
+  it("Should redirect points to origin", async () => {
+    const { mastermind, user } = await setup();
+
+    await mastermind.Token.approve(
+      user.address,
+      ethers.utils.parseEther("2000")
+    );
+
+    await user.Token.transferFrom(
+      mastermind.address,
+      user.address,
+      ethers.utils.parseEther("1000")
+    );
+    const balance1 = await user.Points.balanceOf(user.address);
+
+    // set mastermind as redirection
+    await mastermind.Points.setRedirection(
+      mastermind.address,
+      true
+    ).then((tx) => tx.wait());
+
+    await user.Token.transferFrom(
+      mastermind.address,
+      user.address,
+      ethers.utils.parseEther("1000")
+    );
+    const balance2 = await user.Points.balanceOf(user.address);
+
+    expect(balance1.toString()).eq(ethers.utils.parseEther("0").toString());
+    expect(balance2.toString()).eq(ethers.utils.parseEther("1").toString());
   });
 });

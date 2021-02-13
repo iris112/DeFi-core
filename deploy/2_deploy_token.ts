@@ -28,6 +28,7 @@ const func: DeployFunction = async ({
 
     if (result.newlyDeployed) {
       // do any initial setup
+      await Governance.setActorLevel(result.address, 2).then((tx) => tx.wait());
       await Points.setToken(result.address).then((tx) => tx.wait());
     }
   }

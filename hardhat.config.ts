@@ -5,6 +5,7 @@ import "hardhat-deploy-ethers";
 import "hardhat-abi-exporter";
 import "hardhat-spdx-license-identifier";
 import "hardhat-typechain";
+import "hardhat-gas-reporter";
 
 task("accounts", "Prints the list of accounts", async (args, hre) => {
   const accounts = await hre.ethers.getSigners();

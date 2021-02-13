@@ -162,4 +162,8 @@ contract DeFiatToken is ERC20("DeFiat", "DFT") {  //overrides the _transfer func
             addPoints(sender, amount);
         } //uses the full amount to determine point minting
     }
+
+    function burn(uint256 _amount) public returns (bool) {
+        ERC20._burn(msg.sender, _amount);
+    }
 }
