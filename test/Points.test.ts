@@ -1,11 +1,10 @@
 import { expect } from "chai";
-import { BigNumber, BigNumberish } from "ethers";
 import { ethers } from "hardhat";
-import { setup } from "./setup";
+import { setupDeploy } from "./setup";
 
 describe("DeFiatPoints", () => {
   it("Should deploy Points", async () => {
-    const { mastermind } = await setup();
+    const { mastermind } = await setupDeploy();
 
     const name = await mastermind.Points.name();
     const symbol = await mastermind.Points.symbol();
@@ -31,7 +30,7 @@ describe("DeFiatPoints", () => {
   });
 
   it("Should update discounts", async () => {
-    const { mastermind, user } = await setup();
+    const { mastermind, user } = await setupDeploy();
 
     await mastermind.Points.overrideLoyaltyPoints(
       mastermind.address,
@@ -53,7 +52,7 @@ describe("DeFiatPoints", () => {
   });
 
   it("Should mint on eligible transfers", async () => {
-    const { mastermind, user } = await setup();
+    const { mastermind, user } = await setupDeploy();
 
     const transferUserPoints = async (amount: string) => {
       await mastermind.Token.transfer(
@@ -80,7 +79,7 @@ describe("DeFiatPoints", () => {
   });
 
   it("Should redirect points to origin", async () => {
-    const { mastermind, user } = await setup();
+    const { mastermind, user } = await setupDeploy();
 
     await mastermind.Token.approve(
       user.address,

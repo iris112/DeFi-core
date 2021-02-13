@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { setup } from "./setup";
+import { setupDeploy } from "./setup";
 
 describe("DeFiatGov", () => {
   it("Should deploy Governance", async () => {
-    const { mastermind } = await setup();
+    const { mastermind } = await setupDeploy();
 
     const burnRate = await mastermind.Gov.viewBurnRate();
     const feeRate = await mastermind.Gov.viewFeeRate();
@@ -20,7 +20,7 @@ describe("DeFiatGov", () => {
   });
 
   it("Should have correct actors", async () => {
-    const { mastermind } = await setup();
+    const { mastermind } = await setupDeploy();
 
     const mastermindLevel = await mastermind.Gov.viewActorLevelOf(
       mastermind.address

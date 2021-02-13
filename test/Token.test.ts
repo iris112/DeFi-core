@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { setup } from "./setup";
+import { setupDeploy } from "./setup";
 
 describe("DeFiatToken", () => {
   it("Should deploy DeFiat Token", async () => {
-    const { mastermind } = await setup();
+    const { mastermind } = await setupDeploy();
 
     const name = await mastermind.Token.name();
     const symbol = await mastermind.Token.symbol();
@@ -26,7 +26,7 @@ describe("DeFiatToken", () => {
   });
 
   it("Should be deflationary on transfers", async () => {
-    const { mastermind, user } = await setup();
+    const { mastermind, user } = await setupDeploy();
 
     await mastermind.Token.transfer(
       user.address,

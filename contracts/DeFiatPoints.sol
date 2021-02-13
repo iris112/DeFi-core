@@ -6,10 +6,12 @@
 
 
 
+
+
 pragma solidity ^0.6.0;
 
 import "./interfaces/IDeFiatPoints.sol";
-import "./lib/token/ERC20/ERC20.sol";
+import "./lib/@openzeppelin/token/ERC20/ERC20.sol";
 import "./utils/DeFiatGovernedUtils.sol";
 
 contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeFiatGovernedUtils {

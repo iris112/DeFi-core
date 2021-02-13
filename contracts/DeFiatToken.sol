@@ -2,10 +2,12 @@
 
 
 
+
+
 pragma solidity ^0.6.0;
 
-import "./lib/math/Math.sol";
-import "./lib/token/ERC20/ERC20.sol";
+import "./lib/@openzeppelin/math/Math.sol";
+import "./lib/@openzeppelin/token/ERC20/ERC20.sol";
 import "./DeFiatGov.sol";
 import "./DeFiatPoints.sol";
 
