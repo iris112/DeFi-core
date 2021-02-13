@@ -6,15 +6,16 @@
     "esModuleInterop": true,
     "outDir": "./build",
     "resolveJsonModule": true,
-    "declarationDir": "./build/types",
-    "declarationMap": true,
-    "declaration": true,
   },
   "include": [
     "./deploy", 
     "./scripts",
-    "./test",
+    // "./test",
     "./utils",
+  ],
+  "exclude": [
+    "./cache",
+    "./typechain"
   ],
   "files": [
     "./hardhat.config.ts",

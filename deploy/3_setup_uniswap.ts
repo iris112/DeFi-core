@@ -1,6 +1,10 @@
 import { DeployFunction } from "hardhat-deploy/types";
-import { DeFiatPoints, DeFiatToken, IUniswapV2Router02 } from "../typechain";
-import IUniswapV2Router02Abi from "../build/abi/IUniswapV2Router02.json";
+import {
+  DeFiatPoints,
+  DeFiatToken,
+  IUniswapV2Factory,
+  IUniswapV2Router02,
+} from "../typechain";
 
 const func: DeployFunction = async ({
   getNamedAccounts,
@@ -8,10 +12,12 @@ const func: DeployFunction = async ({
   ethers,
   network,
 }) => {
+  const { log } = deployments;
   const { mastermind, uniswap } = await getNamedAccounts();
 
   if (!network.live) {
-    // approve both tokens
+    console.log("Adding DFT and DFTP Liquidity to Uniswap");
+
     const Token = (await ethers.getContract(
       "DeFiatToken",
       mastermind
@@ -21,10 +27,18 @@ const func: DeployFunction = async ({
       mastermind
     )) as DeFiatPoints;
     const Router = (await ethers.getContractAt(
-      IUniswapV2Router02Abi,
+      "IUniswapV2Router02",
       uniswap,
       mastermind
     )) as IUniswapV2Router02;
+
+    const weth = await Router.WETH();
+    const factory = await Router.factory();
+    const Factory = (await ethers.getContractAt(
+      "IUniswapV2Factory",
+      factory,
+      mastermind
+    )) as IUniswapV2Factory;
 
     await Token.approve(uniswap, ethers.constants.MaxUint256).then((tx) =>
       tx.wait()
@@ -37,6 +51,7 @@ const func: DeployFunction = async ({
       ethers.utils.parseEther("100000")
     ).then((tx) => tx.wait());
 
+    console.log("Adding DFT to Uniswap...");
     await Router.addLiquidityETH(
       Token.address,
       ethers.utils.parseEther("1000"),
@@ -47,6 +62,10 @@ const func: DeployFunction = async ({
       { value: ethers.utils.parseEther("10") }
     ).then((tx) => tx.wait());
 
+    const tokenLp = await Factory.getPair(Token.address, weth);
+    console.log(`Added DFT/ETH LP at ${tokenLp}`);
+
+    console.log("Adding DFTP to Uniswap...");
     await Router.addLiquidityETH(
       Points.address,
       ethers.utils.parseEther("1000"),
@@ -56,6 +75,9 @@ const func: DeployFunction = async ({
       Date.now() + 30000,
       { value: ethers.utils.parseEther("10") }
     ).then((tx) => tx.wait());
+
+    const pointsLp = await Factory.getPair(Points.address, weth);
+    console.log(`Added DFTP/ETH LP at ${pointsLp}`);
   }
 };
 
