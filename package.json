@@ -34,7 +34,11 @@
     "build": "hardhat compile && tsc",
     "compile": "hardhat compile",
     "dev": "hardhat node --watch",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "rinkeby:deploy": "hardhat deploy --network rinkeby",
+    "rinkeby:verify": "hardhat etherscan-verify --network rinkeby",
+    "mainnet:deploy": "hardhat deploy --network mainnet",
+    "mainnet:verify": "hardhat etherscan-verify --network rinkeby"
   },
   "devDependencies": {
     "@ethereum-waffle/chai": "^3.2.2",

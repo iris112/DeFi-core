@@ -28,11 +28,11 @@ const config: HardhatUserConfig = {
     flat: true,
   },
   spdxLicenseIdentifier: {
-    overwrite: true,
+    overwrite: false,
     runOnCompile: true,
   },
   namedAccounts: {
-    mastermind: 0, //"0x4F4B49E7f3661652F13A6D2C86d9Af4435414721",
+    mastermind: 0,
     alpha: 1,
     beta: 2,
     user: 3,
@@ -44,40 +44,46 @@ const config: HardhatUserConfig = {
     },
     points: {
       1: "",
-      4: "0x70c7d7856e1558210cfbf27b7f17853655752453",
+      4: "0xEe650cDBA51A1cFA7428a4e98Bc801B09F16466A",
       31337: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
     },
     gov: {
       1: "0x3Aa3303877A0D1c360a9FE2693AE9f31087A1381",
-      4: "0x064fd7d9c228e8a4a2bf247b432a34d6e1cb9442",
+      4: "0xfe521318261CAc118981d532C0E8D3C2Bf4C1dcE",
       31337: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
     },
     tokenLp: {
       1: "",
-      4: "",
+      4: "0xF7426EAcb2b00398D4cefb3E24115c91821d6fB0",
       31337: "0x11C5626eCA6C553010C8F6EDD8Aee6e44ca98610",
     },
     pointsLp: {
       1: "",
-      4: "",
+      4: "0xCEBF1e6b266DCE1a32ac57Ee4C0e3100d3198e56",
       31337: "0x604fc78e5985d984156B0287b924ad07A4ECd6e7",
     },
   },
   networks: {
     hardhat: {
-      // accounts: [
-      //   {
-      //     privateKey: `0x${process.env.DEPLOYER_PRIVATE_KEY}`,
-      //     balance: "10000000000000000000000"
-      //   }
-      // ],
       forking: {
         blockNumber: 11768005,
-        url: process.env.ALCHEMY_MAIN_DEV_KEY || "",
+        url: process.env.ALCHEMY_MAIN_KEY || "",
       },
     },
     localhost: {
       url: "http://localhost:8545",
+    },
+    rinkeby: {
+      url: process.env.ALCHEMY_RINKEBY_KEY || "",
+      accounts: process.env.DEPLOYER_RINKEBY_KEY
+        ? [`0x${process.env.DEPLOYER_RINKEBY_KEY}`]
+        : undefined,
+    },
+    mainnet: {
+      url: process.env.ALCHEMY_MAIN_KEY || "",
+      accounts: process.env.DEPLOYER_MAIN_KEY
+        ? [`0x${process.env.DEPLOYER_MAIN_KEY}`]
+        : undefined,
     },
   },
 };

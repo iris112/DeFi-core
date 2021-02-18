@@ -1,13 +1,5 @@
 // SPDX-License-Identifier: MIT
 
-
-
-
-
-
-
-
-
 pragma solidity ^0.6.0;
 
 import "./interfaces/IDeFiatPoints.sol";
@@ -22,6 +14,7 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     event AllTranchesUpdated(address indexed user);
     event TokenUpdated(address indexed user, address token);
     event PointsUpdated(address indexed user, address indexed subject, uint256 amount);
+    event WhitelistedUpdated(address indexed user, address indexed subject, bool whitelist);
     event RedirectionUpdated(address indexed user, address indexed subject, bool redirect);
 
     address public token; // DFT ERC20 Token 
@@ -29,6 +22,7 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     mapping (uint256 => uint256) public discountTranches; // mapping of DFTP needed for each discount tranche
     mapping (address => uint256) private _discounts; // mapping of users to current discount, 100 = 100%
     mapping (address => uint256) private _lastTx; // mapping of users last txn
+    mapping (address => bool) private _whitelisted; // mapping of addresses who maintain discount on transfer
     mapping (address => bool) private _redirection; // addresses where points should be redirected to tx.origin, i.e. uniswap
 
     modifier onlyToken {
@@ -67,6 +61,11 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     // Points - Min amount 
     function viewTxThreshold() public override view returns (uint256) {
         return IDeFiatGov(governance).viewTxThreshold();
+    }
+
+    // Points - view whitelisted address
+    function viewWhitelisted(address _address) public override view returns (bool) {
+        return _whitelisted[_address];
     }
 
     // Points - view redirection address
@@ -130,14 +129,17 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     }
 
     // Points - Update the user DFTP balance, Governance-Only
-    function overrideLoyaltyPoints(address _address, uint256 _points) external onlyGovernor {
+    function overrideLoyaltyPoints(address _address, uint256 _points) external override onlyGovernor {
         uint256 balance = balanceOf(_address);
         if (balance == _points) {
             return;
         }
 
         _burn(_address, balance);
-        _mint(_address, _points);
+
+        if (_points > 0) {
+            _mint(_address, _points);
+        }
         emit PointsUpdated(msg.sender, _address, _points);
     }
     
@@ -159,17 +161,27 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     function _transfer(address sender, address recipient, uint256 amount) internal override {
         ERC20._transfer(sender, recipient, amount);
 
-        // force update discount
-        uint256 tranche = viewEligibilityOf(msg.sender);
-        _discounts[msg.sender] = tranche * 10;
+        // force update discount if not whitelisted
+        if (!_whitelisted[sender]) {
+            uint256 tranche = viewEligibilityOf(sender);
+            _discounts[sender] = tranche * 10;
+        }
     }
 
     function burn(uint256 amount) external {
         _burn(msg.sender, amount);
     }
 
+     // Gov - Set redirection address
+    function setWhitelisted(address _address, bool _whitelist) external override onlyGovernor {
+        require(_whitelisted[_address] != _whitelist, "SetWhitelisted: No whitelist change");
+
+        _whitelisted[_address] = _whitelist;
+        emit WhitelistedUpdated(msg.sender, _address, _whitelist);
+    }
+
     // Gov - Set redirection address
-    function setRedirection(address _address, bool _redirect) external onlyGovernor {
+    function setRedirection(address _address, bool _redirect) external override onlyGovernor {
         require(_redirection[_address] != _redirect, "SetRedirection: No redirection change");
 
         _redirection[_address] = _redirect;

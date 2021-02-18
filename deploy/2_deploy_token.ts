@@ -8,18 +8,18 @@ const func: DeployFunction = async ({
   network,
 }) => {
   const { deploy } = deployments;
-  const { mastermind } = await getNamedAccounts();
+  const { mastermind, token } = await getNamedAccounts();
+
+  const Governance = (await ethers.getContract(
+    "DeFiatGov",
+    mastermind
+  )) as DeFiatGov;
+  const Points = (await ethers.getContract(
+    "DeFiatPoints",
+    mastermind
+  )) as DeFiatPoints;
 
   if (!network.live) {
-    const Governance = (await ethers.getContract(
-      "DeFiatGov",
-      mastermind
-    )) as DeFiatGov;
-    const Points = (await ethers.getContract(
-      "DeFiatPoints",
-      mastermind
-    )) as DeFiatPoints;
-
     const result = await deploy("DeFiatToken", {
       from: mastermind,
       log: true,
@@ -31,6 +31,9 @@ const func: DeployFunction = async ({
       await Governance.setActorLevel(result.address, 2).then((tx) => tx.wait());
       await Points.setToken(result.address).then((tx) => tx.wait());
     }
+  } else {
+    await Governance.setActorLevel(token, 2).then((tx) => tx.wait());
+    await Points.setToken(token).then((tx) => tx.wait());
   }
 };
 

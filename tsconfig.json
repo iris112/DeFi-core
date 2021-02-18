@@ -6,11 +6,11 @@
     "esModuleInterop": true,
     "outDir": "./build",
     "resolveJsonModule": true,
+    "declaration": true
   },
   "include": [
     "./deploy", 
     "./scripts",
-    // "./test",
     "./utils",
   ],
   "exclude": [
