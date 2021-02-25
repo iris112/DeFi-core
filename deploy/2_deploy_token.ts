@@ -1,5 +1,5 @@
 import { DeployFunction } from "hardhat-deploy/types";
-import { DeFiatGov, DeFiatPoints, DeFiatToken } from "../typechain";
+import { DeFiatGov, DeFiatPoints } from "../typechain";
 
 const func: DeployFunction = async ({
   getNamedAccounts,

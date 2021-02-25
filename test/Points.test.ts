@@ -17,7 +17,7 @@ describe("DeFiatPoints", () => {
 
     expect(name).eq("DeFiat Points v2");
     expect(symbol).eq("DFTPv2");
-    expect(totalSupply.eq(0)).true;
+    expect(totalSupply.toString()).eq(ethers.utils.parseEther("15000").toString());
     expect(token).eq(mastermind.Token.address);
     expect(governance).eq(mastermind.Gov.address);
     expect(threshold.toString()).eq(ethers.utils.parseEther("40").toString());
@@ -53,6 +53,9 @@ describe("DeFiatPoints", () => {
 
   it("Should mint on eligible transfers", async () => {
     const { mastermind, user } = await setupDeploy();
+
+    // reset mastermind points
+    await mastermind.Points.overrideLoyaltyPoints(mastermind.address, 0).then(tx => tx.wait())
 
     const transferUserPoints = async (amount: string) => {
       await mastermind.Token.transfer(

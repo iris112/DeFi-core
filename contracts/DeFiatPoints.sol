@@ -32,6 +32,7 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     
     constructor(address _governance) public {
         _setGovernance(_governance);
+        _mint(msg.sender, 15000 * 1e18);
     }
 
     // Views

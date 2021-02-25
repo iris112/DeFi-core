@@ -45,10 +45,6 @@ const func: DeployFunction = async ({
     await Points.approve(uniswap, ethers.constants.MaxUint256).then((tx) =>
       tx.wait()
     );
-    await Points.overrideLoyaltyPoints(
-      mastermind,
-      ethers.utils.parseEther("150")
-    ).then((tx) => tx.wait());
 
     console.log("Adding DFT to Uniswap...");
     await Router.addLiquidityETH(

@@ -27,7 +27,7 @@ import "./lib/@openzeppelin/token/ERC20/IERC20.sol";
 * 
 * As usual, any question feel free to reach out to us.
 */
-contract TokenTimelock {
+contract DeFiatTimelock {
 
     // ERC20 basic token contract being held
     IERC20 private _token;
@@ -67,8 +67,11 @@ contract TokenTimelock {
     }
     
     function canRelease() public view returns (bool) {
-        if(_releaseTime < block.timestamp){return true;}
-        else {return false;}
+        if(_releaseTime < block.timestamp){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -86,7 +89,8 @@ contract TokenTimelock {
     
     function extend(uint256 _newReleaseTime) public returns(bool){
         require(msg.sender == _beneficiary, "only the beneficiary can extend timelock");
-	require(_newReleaseTime > _releaseTime, "can only extend timeLock");
+	    require(_newReleaseTime > _releaseTime, "can only extend timeLock");
+        
         _releaseTime = _newReleaseTime;
         return true;
     }
