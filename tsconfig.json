@@ -4,21 +4,18 @@
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "./build",
-    "resolveJsonModule": true,
-    "declaration": true
+    "outDir": "build",
+    "resolveJsonModule": true
   },
   "include": [
     "./deploy", 
     "./scripts",
+    "./test",
     "./utils",
   ],
   "exclude": [
     "./cache",
     "./typechain"
   ],
-  "files": [
-    "./hardhat.config.ts",
-    "index.ts"
-  ]
+  "files": ["./hardhat.config.ts"]
 }

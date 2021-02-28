@@ -37,6 +37,7 @@ const config: HardhatUserConfig = {
     beta: 2,
     user: 3,
     uniswap: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+    treasury: "0x0419eb10e9c1effb47cb6b5b1b2b2b3556395ae1",
     token: {
       1: "0xB6eE603933E024d8d53dDE3faa0bf98fE2a3d6f1",
       4: "0xB571d40e4A7087C1B73ce6a3f29EaDfCA022C5B2",

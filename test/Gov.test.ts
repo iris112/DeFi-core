@@ -15,7 +15,7 @@ describe("DeFiatGov", () => {
     expect(burnRate.toNumber()).eq(50);
     expect(feeRate.toNumber()).eq(200);
     expect(feeDestination).eq(mastermind.address);
-    expect(txThreshold.toString()).eq(ethers.utils.parseEther("40").toString());
+    expect(txThreshold.toString()).eq(ethers.utils.parseEther("5").toString());
     expect(mastermindAddress).eq(mastermind.address);
   });
 

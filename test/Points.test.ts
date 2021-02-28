@@ -17,10 +17,12 @@ describe("DeFiatPoints", () => {
 
     expect(name).eq("DeFiat Points v2");
     expect(symbol).eq("DFTPv2");
-    expect(totalSupply.toString()).eq(ethers.utils.parseEther("15000").toString());
+    expect(totalSupply.toString()).eq(
+      ethers.utils.parseEther("150000").toString()
+    );
     expect(token).eq(mastermind.Token.address);
     expect(governance).eq(mastermind.Gov.address);
-    expect(threshold.toString()).eq(ethers.utils.parseEther("40").toString());
+    expect(threshold.toString()).eq(ethers.utils.parseEther("5").toString());
     expect(firstTranche.toString()).eq(
       ethers.utils.parseEther("100").toString()
     );
@@ -55,7 +57,10 @@ describe("DeFiatPoints", () => {
     const { mastermind, user } = await setupDeploy();
 
     // reset mastermind points
-    await mastermind.Points.overrideLoyaltyPoints(mastermind.address, 0).then(tx => tx.wait())
+    await mastermind.Points.overrideLoyaltyPoints(
+      mastermind.address,
+      0
+    ).then((tx) => tx.wait());
 
     const transferUserPoints = async (amount: string) => {
       await mastermind.Token.transfer(
@@ -79,6 +84,65 @@ describe("DeFiatPoints", () => {
     expect(balance1.toNumber()).eq(0);
     expect(balance2.toString()).eq(ethers.utils.parseEther("1").toString());
     expect(balance3.toString()).eq(ethers.utils.parseEther("2").toString());
+  });
+
+  it("Should not mint when not whitelisted", async () => {
+    const { mastermind, user } = await setupDeploy();
+
+    // reset mastermind points
+    await mastermind.Points.overrideLoyaltyPoints(
+      mastermind.address,
+      0
+    ).then((tx) => tx.wait());
+
+    await mastermind.Points.setWhitelisted(
+      mastermind.Token.address,
+      false
+    ).then((tx) => tx.wait());
+
+    await mastermind.Token.transfer(
+      user.address,
+      ethers.utils.parseEther("100")
+    ).then((tx) => tx.wait());
+
+    const balance = await mastermind.Points.balanceOf(mastermind.address);
+    expect(balance.toNumber()).eq(0);
+  });
+
+  it("Should maintain discount when governance", async () => {
+    const { mastermind, user } = await setupDeploy();
+
+    // reset mastermind points
+    await mastermind.Points.overrideLoyaltyPoints(
+      mastermind.address,
+      ethers.utils.parseEther("500")
+    ).then((tx) => tx.wait());
+
+    await mastermind.Points.updateMyDiscount().then((tx) => tx.wait());
+    const level1 = await mastermind.Points.viewDiscountOf(mastermind.address);
+
+    await mastermind.Points.overrideDiscount(
+      mastermind.address,
+      100
+    ).then((tx) => tx.wait());
+    const level2 = await mastermind.Points.viewDiscountOf(mastermind.address);
+
+    await mastermind.Points.transfer(
+      user.address,
+      ethers.utils.parseEther("500")
+    ).then((tx) => tx.wait());
+    const level3 = await mastermind.Points.viewDiscountOf(mastermind.address);
+
+    await mastermind.Token.transfer(
+      user.address,
+      ethers.utils.parseEther("100")
+    ).then((tx) => tx.wait());
+    const balance = await user.Token.balanceOf(user.address);
+
+    expect(level1.toNumber()).eq(20);
+    expect(level2.toNumber()).eq(100);
+    expect(level3.toNumber()).eq(100);
+    expect(balance.toString()).eq(ethers.utils.parseEther("100").toString());
   });
 
   it("Should redirect points to origin", async () => {

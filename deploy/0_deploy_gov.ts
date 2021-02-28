@@ -8,7 +8,7 @@ const func: DeployFunction = async ({
   ethers,
 }) => {
   const { deploy } = deployments;
-  const { mastermind } = await getNamedAccounts();
+  const { mastermind, treasury } = await getNamedAccounts();
 
   const result = await deploy("DeFiatGov", {
     from: mastermind,
@@ -22,10 +22,14 @@ const func: DeployFunction = async ({
     )) as DeFiatGov;
 
     await Governance.changeTxThreshold(
-      ethers.utils.parseEther("40")
+      ethers.utils.parseEther("5")
     ).then((tx) => tx.wait());
     await Governance.changeBurnRate(50).then((tx) => tx.wait());
     await Governance.changeFeeRate(200).then((tx) => tx.wait());
+
+    if (network.live) {
+      await Governance.setFeeDestination(treasury).then((tx) => tx.wait());
+    }
   }
 };
 

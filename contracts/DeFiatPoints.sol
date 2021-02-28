@@ -22,17 +22,12 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     mapping (uint256 => uint256) public discountTranches; // mapping of DFTP needed for each discount tranche
     mapping (address => uint256) private _discounts; // mapping of users to current discount, 100 = 100%
     mapping (address => uint256) private _lastTx; // mapping of users last txn
-    mapping (address => bool) private _whitelisted; // mapping of addresses who maintain discount on transfer
+    mapping (address => bool) private _whitelisted; // mapping of addresses who are allowed to call addPoints
     mapping (address => bool) private _redirection; // addresses where points should be redirected to tx.origin, i.e. uniswap
-
-    modifier onlyToken {
-        require(msg.sender == token, "Points: Only DeFiat Token");
-        _;
-    }
     
     constructor(address _governance) public {
         _setGovernance(_governance);
-        _mint(msg.sender, 15000 * 1e18);
+        _mint(msg.sender, 150000 * 1e18);
     }
 
     // Views
@@ -87,7 +82,7 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     function updateMyDiscount() public returns (bool) {
         uint256 tranche = viewEligibilityOf(msg.sender);
         uint256 discount = tranche * 10;
-        require(discount > _discounts[msg.sender], "UpdateDiscount: No discount change");
+        require(discount != _discounts[msg.sender], "UpdateDiscount: No discount change");
 
         _updateDiscount(msg.sender, discount);
     }
@@ -145,8 +140,12 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     }
     
     // Points - Add points to the _address when the _txSize is greater than txThreshold
-    // Only callable by Token
+    // Only callable by governors
     function addPoints(address _address, uint256 _txSize, uint256 _points) external onlyGovernor {
+        if (!_whitelisted[msg.sender]) {
+            return;
+        }
+        
         if(_txSize >= viewTxThreshold() && _lastTx[tx.origin] < block.number){
             if (_redirection[_address]) {
                 _mint(tx.origin, _points);
@@ -162,8 +161,8 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
     function _transfer(address sender, address recipient, uint256 amount) internal override {
         ERC20._transfer(sender, recipient, amount);
 
-        // force update discount if not whitelisted
-        if (!_whitelisted[sender]) {
+        // force update discount if not governance
+        if (IDeFiatGov(governance).viewActorLevelOf(sender) == 0) {
             uint256 tranche = viewEligibilityOf(sender);
             _discounts[sender] = tranche * 10;
         }
@@ -173,7 +172,7 @@ contract DeFiatPoints is ERC20("DeFiat Points v2", "DFTPv2"), IDeFiatPoints, DeF
         _burn(msg.sender, amount);
     }
 
-     // Gov - Set redirection address
+     // Gov - Set whitelist address
     function setWhitelisted(address _address, bool _whitelist) external override onlyGovernor {
         require(_whitelisted[_address] != _whitelist, "SetWhitelisted: No whitelist change");
 

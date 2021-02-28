@@ -19,6 +19,12 @@ const func: DeployFunction = async ({
     mastermind
   )) as DeFiatPoints;
 
+  const postDeploy = async (address: string) => {
+    await Governance.setActorLevel(address, 2).then((tx) => tx.wait());
+    await Points.setToken(address).then((tx) => tx.wait());
+    await Points.setWhitelisted(address, true).then((tx) => tx.wait());
+  };
+
   if (!network.live) {
     const result = await deploy("DeFiatToken", {
       from: mastermind,
@@ -28,12 +34,10 @@ const func: DeployFunction = async ({
 
     if (result.newlyDeployed) {
       // do any initial setup
-      await Governance.setActorLevel(result.address, 2).then((tx) => tx.wait());
-      await Points.setToken(result.address).then((tx) => tx.wait());
+      await postDeploy(result.address);
     }
   } else {
-    await Governance.setActorLevel(token, 2).then((tx) => tx.wait());
-    await Points.setToken(token).then((tx) => tx.wait());
+    await postDeploy(token);
   }
 };
 
