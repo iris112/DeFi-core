@@ -44,22 +44,22 @@ const config: HardhatUserConfig = {
       31337: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
     },
     points: {
-      1: "",
+      1: "0xDe3E18eCB613498b9a1483Af51394Ec2259BcD0a",
       4: "0xEe650cDBA51A1cFA7428a4e98Bc801B09F16466A",
       31337: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
     },
     gov: {
-      1: "0x3Aa3303877A0D1c360a9FE2693AE9f31087A1381",
+      1: "0xefcCb112270c3C197b86ff03D26340d82a087F6c",
       4: "0xfe521318261CAc118981d532C0E8D3C2Bf4C1dcE",
       31337: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
     },
     tokenLp: {
-      1: "",
+      1: "0xe2a1d215d03d7e9fa0ed66355c86678561e4940a",
       4: "0xF7426EAcb2b00398D4cefb3E24115c91821d6fB0",
       31337: "0x11C5626eCA6C553010C8F6EDD8Aee6e44ca98610",
     },
     pointsLp: {
-      1: "",
+      1: "0xb4c36b752b706836ab90ed4e78b058150ae9ed59",
       4: "0xCEBF1e6b266DCE1a32ac57Ee4C0e3100d3198e56",
       31337: "0x604fc78e5985d984156B0287b924ad07A4ECd6e7",
     },
@@ -81,6 +81,7 @@ const config: HardhatUserConfig = {
         : undefined,
     },
     mainnet: {
+      gasPrice: 110000000000,
       url: process.env.ALCHEMY_MAIN_KEY || "",
       accounts: process.env.DEPLOYER_MAIN_KEY
         ? [`0x${process.env.DEPLOYER_MAIN_KEY}`]

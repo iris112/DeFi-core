@@ -1,7 +1,7 @@
 {
   "name": "@defiat-crypto/core-contracts",
   "description": "DeFiat: Core Smart Contracts",
-  "version": "1.9.0",
+  "version": "2.0.0",
   "license": "MIT",
   "homepage": "https://defiat.net",
   "author": {
@@ -35,10 +35,11 @@
     "compile": "hardhat compile",
     "dev": "hardhat node --watch",
     "test": "hardhat test",
-    "rinkeby:deploy": "hardhat deploy --network rinkeby",
-    "rinkeby:verify": "hardhat etherscan-verify --network rinkeby",
-    "mainnet:deploy": "hardhat deploy --network mainnet",
-    "mainnet:verify": "hardhat etherscan-verify --network rinkeby"
+    "rinkeby:deploy": "hardhat --network rinkeby deploy",
+    "rinkeby:verify": "hardhat --network rinkeby etherscan-verify",
+    "mainnet:deploy": "hardhat --network mainnet deploy",
+    "mainnet:verify": "hardhat --network mainnet etherscan-verify",
+    "mainnet:run": "hardhat --network mainnet run"
   },
   "devDependencies": {
     "@ethereum-waffle/chai": "^3.2.2",

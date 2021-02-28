@@ -11,7 +11,7 @@ import "./lib/@openzeppelin/token/ERC20/IERC20.sol";
 * This will avoid having to wait for the maturity to reach to reload the UNIv2 tokens into a new lock-contract.
 *
 * Information:
-* UNISWAP liquidity token: 0xe2a1d215d03d7e9fa0ed66355c86678561e4940a
+* UNISWAP liquidity token: 0xb4c36b752b706836ab90ed4e78b058150ae9ed59
 * Constructor has been initialized with 180 day of locking (see: timeLockDays in the code below)
 * You can interact with the contract on Etherscan to check the _release time (linux timestamp)
 * _releaseTime = 1640995199

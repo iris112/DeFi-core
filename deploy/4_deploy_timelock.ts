@@ -10,14 +10,14 @@ const func: DeployFunction = async ({
   network,
 }) => {
   const { deploy } = deployments;
-  const { mastermind, token } = await getNamedAccounts();
+  const { mastermind, treasury, pointsLp } = await getNamedAccounts();
 
   const result = await deploy("DeFiatTimelock", {
     from: mastermind,
     log: true,
-    args: [token, mastermind, RELEASE_TIME]
+    args: [pointsLp, treasury, RELEASE_TIME],
   });
-}
+};
 
 export default func;
-func.tags = ["Timelock"]
+func.tags = ["Timelock"];
